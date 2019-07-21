@@ -1,1 +1,0 @@
-exec autopep8 --in-place --aggressive --aggressive favorite_app/*.py
