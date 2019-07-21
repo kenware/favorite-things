@@ -102,5 +102,6 @@ def validate_id(id):
     try:
         int(id)
     except ValueError:
-        raise serializers.ValidationError({'status': constant_messages['invalid_id']})
-    return True               
+        raise serializers.ValidationError(
+            {'status': constant_messages['invalid_id']})
+    return True

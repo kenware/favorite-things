@@ -14,3 +14,4 @@ omit =
   */xml/sax/expatreader.py
   */venv/*
   venv/*
+  */unittest/*

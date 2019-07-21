@@ -64,7 +64,7 @@ class FavoriteThingsSerializer(serializers.ModelSerializer):
         request = self.context['request']
 
         if instance.ranking != validated_data.get('ranking'):
-            re_order_ranking(validated_data, request)\
+            re_order_ranking(validated_data, request)
 
         audit_log = gnerate_audit_log(instance, validated_data)
         validated_data['audit_log'] = audit_log
@@ -96,8 +96,8 @@ class CategoryWithChildrenSerializer(serializers.ModelSerializer):
        category data with its associated favoritethings
     """
 
-    categories = FavoriteThingsSerializer(many=True)
+    favorites = FavoriteThingsSerializer(many=True)
 
     class Meta:
         model = Category
-        fields = ('id', 'name', 'categories')
+        fields = ('id', 'name', 'favorites')
