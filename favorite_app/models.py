@@ -44,7 +44,7 @@ class FavoriteThings(models.Model):
     metadata = JSONField(default=dict())
     audit_log = JSONField(default=list())
     created_date = models.DateTimeField(default=timezone.now)
-    modified_date = models.DateTimeField(blank=True, null=True)
+    modified_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('ranking',)
