@@ -40,19 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'favorite_app',
+    'django_nose',
     'corsheaders',
-
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 # Use nose to run all tests
@@ -65,7 +65,7 @@ NOSE_ARGS = [
     '--cover-xml' 
 ]
 
-ROOT_URLCONF = 'favorite_things.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -100,7 +100,7 @@ REST_FRAMEWORK = {
    'PAGE_SIZE': 20
 }
 
-WSGI_APPLICATION = 'favorite_things.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
@@ -143,10 +143,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
+
 CORS_ORIGIN_ALLOW_ALL = True
-# del DATABASES['default']['OPTIONS']['sslmode']
+# CORS_ORIGIN_WHITELIST = 'localhost:8000'

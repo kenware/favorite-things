@@ -48,6 +48,11 @@ class FavoriteThings(models.Model):
 
     class Meta:
         ordering = ('ranking',)
+    
+    @cached_property
+    def max_ranking(self):
+        return FavoriteThings.objects.filter(
+        category_id=self.category.id).order_by('-ranking').first().ranking
 
     def __str__(self):
         return "Title: %s" % (self.title)

@@ -102,3 +102,22 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Client gitignore
+client/node_modules
+client/dist
+
+client/tests/e2e/reports/
+client/selenium-debug.log
+
+# local env files
+client/.env.local
+client/.env.*.local
+
+# Log files
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+.DS_Store
+.vscode
+/client/.DS_Store

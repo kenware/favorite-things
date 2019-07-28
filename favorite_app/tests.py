@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
 # Local import
 from favorite_app.models import Category, FavoriteThings
-from favorite_app.mocks import favorite_data
+from favorite_app.mocks import data, set_up_data
 
 
 class CategoryTestCase(APITestCase):
@@ -94,8 +94,9 @@ class FavoriteThingsTestCase(APITestCase):
 
         self.url = reverse('favorite-list')
         self.category = Category.objects.create(name='Movies')
-        favorite_data['category_id'] = self.category.pk
-        self.favorte_thing = FavoriteThings.objects.create(**favorite_data)
+        # favorite_data['category'] = self.category.pk
+        self.favorte_thing = FavoriteThings.objects.create(
+            category=self.category, **set_up_data)
 
     def detail_url(self):
         """
@@ -119,15 +120,14 @@ class FavoriteThingsTestCase(APITestCase):
         create a new favorite things
         """
 
-        favorite_data['title'] = 'Game of Throne'
-        favorite_data['category_id'] = self.category.pk
-        response = self.client.post(self.url, favorite_data)
+        data['category'] = self.category.pk
+        response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['title'], favorite_data['title'])
+        self.assertEqual(response.data['title'], data['title'])
         self.assertEqual(
             response.data['description'],
-            favorite_data['description'])
-        self.assertEqual(response.data['ranking'], favorite_data['ranking'])
+            data['description'])
+        self.assertEqual(response.data['ranking'], data['ranking'])
 
     def test_re_order_favorite_ranking_on_new_favorite_things_creation(self):
         """
@@ -136,14 +136,15 @@ class FavoriteThingsTestCase(APITestCase):
         particular category
         """
 
-        favorite_data['ranking'] = 1
-        favorite_data['title'] = 'Super Girl'
+        data['title'] = 'Super Girl'
+        data['category'] = self.category.pk
 
         before_re_ordered_ranking = FavoriteThings.objects.get(
             pk=self.favorte_thing.pk)
         self.assertEqual(before_re_ordered_ranking.ranking, 1)
 
-        response = self.client.post(self.url, favorite_data)
+        response = self.client.post(self.url, data)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['ranking'], 1)
 
@@ -162,6 +163,17 @@ class FavoriteThingsTestCase(APITestCase):
         self.assertIsInstance(response.data['results'], list)
         self.assertGreaterEqual(len(response.data['results']), 1)
 
+    def test_search_favorites(self):
+        """
+        get all the favorite things in a category
+        """
+
+        url = f'{self.url}?search=Avengers'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data['results'], list)
+        self.assertGreaterEqual(len(response.data['results']), 1)
+
     def test_audit_log_on_update_succeeds(self):
         """
         Ensure that new changes are logged on update
@@ -170,19 +182,9 @@ class FavoriteThingsTestCase(APITestCase):
         before_update = FavoriteThings.objects.get(pk=self.favorte_thing.pk)
         self.assertEqual(len(before_update.audit_log), 0)
 
-        favorite_data['title'] = 'Aquaman'
-        after_update = self.client.patch(self.detail_url(), favorite_data)
+        data['title'] = 'Aquaman'
+        after_update = self.client.patch(self.detail_url(), data)
         self.assertEqual(len(after_update.data['audit_log']), 1)
-
-    def test_update_favorite_things_succeeds(self):
-        """
-        update favorite things
-        """
-
-        favorite_data['title'] = 'Aquaman'
-        response = self.client.patch(self.detail_url(), favorite_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['title'], favorite_data['title'])
 
     def test_create_favorite_things_with_description_less_than_10_fails(self):
         """
@@ -190,13 +192,13 @@ class FavoriteThingsTestCase(APITestCase):
         less than 10
         """
 
-        data = {
+        new_data = {
             'title': 'superman',
             'description': 'new',
-            'category_id': self.category.pk,
+            'category': self.category.pk,
 
         }
-        response = self.client.post(self.url, data)
+        response = self.client.post(self.url, new_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_favorite_things_with_invalid_querystring_fails(self):
@@ -207,3 +209,11 @@ class FavoriteThingsTestCase(APITestCase):
         url = f'{self.url}?categoryId=any&categoryName={self.category.name}'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_delete_favoeite_succeeds(self):
+        """
+        Ensure that favorite can be deleted
+        """
+
+        response = self.client.delete(self.detail_url())
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
