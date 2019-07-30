@@ -50,7 +50,7 @@ export default {
       const url = this.categoryList();
       await this.$store.dispatch('category/create', { url, category }).then((res) => {
         this.$store.dispatch('category/get', { url: this.categoryLimit(this.limit), key: 'categories' });
-        if (res.data.status === 'success') {
+        if (res.status === 'success') {
           this.Alert('Category Created', 'success', { m: `You have created ${this.name}` }, 3000);
           this.$modal.hide('category');
         } else {

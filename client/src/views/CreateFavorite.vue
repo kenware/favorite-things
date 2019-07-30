@@ -22,8 +22,8 @@
            <span v-if="isSubmit" class="red-text">{{data.title ? '': '*Field required'}}</span>
         </div>
         <div class="input-field col s6">
-          <input v-model="data.ranking" id="ranking" type="text" class="validate">
-          <label class="active-label" for="last_name">Ranking</label>
+          <input v-model="data.ranking" id="ranking" type="number" min="1" class="validate">
+          <label class="active-label" for="ranking">Ranking</label>
            <span v-if="isSubmit" class="red-text">{{data.ranking ? '': '*Field required'}}</span>
         </div>
       </div>
