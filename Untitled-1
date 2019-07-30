@@ -1,0 +1,31 @@
+export SECRETE='j01@r16mki9d=(&a=62sa=jg31oov$f=^9akf@%ss@^^9-n1xm'
+export DATABASE_URL=postgres://postgres:dehydrogenase@database-2.cpxuosiheb6x.us-west-2.rds.amazonaws.com:5432/favorite
+   unset DATABASE_URL
+    unset SECRETE
+
+
+
+    [program:gunicorn]
+directory=/home/ubuntu/favorite-things
+command=/home/ubuntu/env/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/favorite-things/app.sock config.wsgi:application
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/ginicorn/gunicorn.err.log
+stdout_logfile=/var/log/gunicorn/gunicorn.out.log
+
+[group:guni]
+programs:gunicorn
+
+
+
+
+server {
+    listen 80;
+    server_name ec2-34-221-201-174.us-west-2.compute.amazonaws.com;
+    server_names_hash_bucket_size  64;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/favorite-things/app.sock;
+    }
+}
