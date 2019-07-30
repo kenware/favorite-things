@@ -5,8 +5,14 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils import timezone
 
+class BaseModel(models.Model):
+    created_date = models.DateTimeField(default=timezone.now)
+    modified_date = models.DateTimeField(default=timezone.now)
 
-class Category(models.Model):
+    class Meta:
+        abstract = True
+
+class Category(BaseModel):
     """
     Category model
     """
@@ -25,7 +31,7 @@ class Category(models.Model):
         return "Name: %s" % (self.name)
 
 
-class FavoriteThings(models.Model):
+class FavoriteThings(BaseModel):
     """
     FavoriteThing model
     """
@@ -41,10 +47,8 @@ class FavoriteThings(models.Model):
         Category,
         on_delete=models.CASCADE,
         related_name='favorites')
-    metadata = JSONField(default=dict())
-    audit_log = JSONField(default=list())
-    created_date = models.DateTimeField(default=timezone.now)
-    modified_date = models.DateTimeField(default=timezone.now)
+    metadata = JSONField(default=dict)
+    audit_log = JSONField(default=list)
 
     class Meta:
         ordering = ('ranking',)
