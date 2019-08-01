@@ -5,12 +5,14 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils import timezone
 
+
 class BaseModel(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         abstract = True
+
 
 class Category(BaseModel):
     """
@@ -52,11 +54,11 @@ class FavoriteThings(BaseModel):
 
     class Meta:
         ordering = ('ranking',)
-    
+
     @cached_property
     def max_ranking(self):
         return FavoriteThings.objects.filter(
-        category_id=self.category.id).order_by('-ranking').first().ranking
+            category_id=self.category.id).order_by('-ranking').first().ranking
 
     def __str__(self):
         return "Title: %s" % (self.title)

@@ -20,10 +20,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
         """
         Conditional render different serializers based on the request
         """
-
-        include_related = self.request.query_params.get('include', None)
-        if include_related == 'children':
-            return serializers.CategoryWithChildrenSerializer
+        if self.request:
+            include_related = self.request.query_params.get('include', None)
+            if include_related == 'children':
+                return serializers.CategoryWithChildrenSerializer
         return serializers.CategorySerializer
 
 

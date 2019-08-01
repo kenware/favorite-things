@@ -57,12 +57,14 @@ def re_order_ranking(validated_data, request, action, *args, **kwargs):
         elif action == 'delete':
             favorite_thing.ranking -= 1
         favorite_thing.save()
-    
+
     # re-order on update
     if action == 'update':
         instance_ranking = kwargs['instance_ranking']
-        ranking_lte = ranking if int(ranking) > instance_ranking else instance_ranking
-        ranking_gte = instance_ranking if int(ranking) > instance_ranking else ranking
+        ranking_lte = ranking if int(
+            ranking) > instance_ranking else instance_ranking
+        ranking_gte = instance_ranking if int(
+            ranking) > instance_ranking else ranking
         lower_favorite_things = FavoriteThings.objects.filter(
             ranking__lte=ranking_lte,
             ranking__gte=ranking_gte,
@@ -75,6 +77,7 @@ def re_order_ranking(validated_data, request, action, *args, **kwargs):
             else:
                 favorite_thing.ranking += 1
             favorite_thing.save()
+
 
 def metadata_log(initial_data, new_metatada):
     """
