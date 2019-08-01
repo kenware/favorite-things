@@ -23,7 +23,7 @@ if [ -e gunicorn.conf ]
 then 
     echo "gunicorn configuration aleady created"
 else
-    cat <<EOF >gunicorn.conf
+    sudo cat <<EOF >gunicorn.conf
     program:gunicorn]
     command=/home/ubuntu/env/bin/gunicorn --chdir /home/ubuntu/favorite-things --workers 3 --bind unix:/home/ubuntu/favorite-things/app.sock config.wsgi:application
     autostart=true
@@ -54,7 +54,7 @@ if [ -e django.conf ]
 then 
     echo "nginx configuration already created"
 else
-    cat <<EOF >gunicorn.conf
+    sudo cat <<EOF >gunicorn.conf
     server {
         listen 80;
         server_name ec2-34-221-201-174.us-west-2.compute.amazonaws.com;
