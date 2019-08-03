@@ -42,12 +42,11 @@ body {
 .pagination li.active {
     background-color: #42b983 !important;
 }
-// .vs__dropdown-toggle {
-//     border: 0px !important;
-// }
+.material-tooltip {
+  background-color: #42b983 !important;
+}
 .vs__search {
-    // border: 0px !important;
-    border-bottom: 0px !important;
+  border-bottom: 0px !important;
 }
 .vs__clear {
   height: 0px !important;

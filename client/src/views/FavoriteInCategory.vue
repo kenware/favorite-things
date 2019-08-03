@@ -65,7 +65,7 @@ export default {
   data: () => ({
     search: '',
     delayTimer: '',
-    limit: 9,
+    limit: 7,
     id: null,
   }),
   components: {
