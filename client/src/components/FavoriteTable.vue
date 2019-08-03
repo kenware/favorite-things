@@ -28,6 +28,14 @@
               {{ new Date(favorite.modifiedDate) | dateFormat('MMM DD, YYYY') }}
             </td>
             <td class="action">
+                <i
+                  class="material-icons tooltipped color"
+                  data-position="top"
+                  data-tooltip="view">
+                <router-link :to="{ name: 'favoriteDetail', params: { id: favorite.id }}">
+                  visibility
+                </router-link>
+              </i>&nbsp;&nbsp;
               <i class="material-icons color">
                 <router-link :to="{ name: 'editFavorite', params: { id: favorite.id }}">
                   edit
@@ -39,18 +47,22 @@
               </i>
               </td>
         </tr>
-
         </tbody>
     </table>
 </template>
 
 <script>
+import materializeInit from '@/mixins/materializeInit';
 
 export default {
   name: 'FavoriteCategoryTable',
   props: {
     favorites: Array,
     deleteFavorite: Function,
+  },
+  mixins: [materializeInit],
+  mounted() {
+    this.init()
   },
   methods: {
     onClick(id) {
@@ -61,8 +73,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .color {
-    color: #42b983;
+  a {
+    color: #2c3e50 !important;
   }
   table {
     tbody {
@@ -79,4 +91,8 @@ export default {
       }
     }
   }
+  .waves-effect {
+    vertical-align: top !important;
+  }
+
 </style>

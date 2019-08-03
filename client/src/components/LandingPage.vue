@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="parallax">
-    <img src="/img/landing2.jpeg">
+    <img src="/img/image.jpg">
   </div>
 </div>
 </div>
